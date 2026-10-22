@@ -41,7 +41,20 @@ Para corregir este desequilibrio estructural sin provocar fugas involuntarias de
 
 ---
 
-## 2. Análisis de Cascada de Margen de Bolsillo (Pocket Margin Waterfall)
+## 2. Origen de los Datos y Arquitectura ERP
+
+Dado que la información transaccional real de las empresas de distribución B2B está sujeta a estrictos acuerdos de confidencialidad (NDA), este proyecto utiliza un conjunto de datos transaccionales sintético pero idéntico en estructura al de un ERP de producción (`data/b2b_erp_transactions.parquet`).
+
+El generador (`src/data_generator.py`) simula un ejercicio fiscal completo que comprende **55.000 líneas de factura emitidas a 800 cuentas clientes (pymes, medianas empresas y grandes cuentas), gestionadas por 25 comerciales a lo largo de 4 familias de producto** (Maquinaria Pesada, Especialidades Químicas, Sensores Electrónicos y Suministros MRO). La arquitectura de datos reproduce fielmente las tablas de ERPs reales como Sage 50 o SAP S/4HANA:
+- **Variables Comerciales:** Precio Unitario de Catálogo, Porcentaje de Descuento Negociado, Facturación Neta, Identificador de Comercial, Nivel de Cuenta Cliente y Bonificaciones (*Rebates*) Fuera de Factura (del 1,5% al 3,5%).
+- **Variables Operativas y de Suministro:** Coste de Adquisición/Fabricación (COGS), tasas fijas de manipulación de almacén ($20 a $45 por pedido), flete variable por peso y recargos logísticos por envíos urgentes fraccionados.
+- **Condiciones Financieras:** Plazos contractuales de cobro y días reales de demora en el pago (desde 25 días en clientes cumplidores hasta más de 110 días en cuentas morosas), valorados contra un coste medio ponderado de capital (WACC) anual del 8,5%.
+
+Todas las distribuciones estocásticas se encuentran fijadas con semilla reproducible (`random_state=42`) para garantizar que cualquier cálculo pueda ser verificado de extremo a extremo.
+
+---
+
+## 3. Análisis de Cascada de Margen de Bolsillo (Pocket Margin Waterfall)
 
 Los estados financieros convencionales inducen a error al equipo directivo al evaluar el rendimiento en el nivel de margen bruto contable ($\text{Margen Bruto} = \text{Ventas} - \text{COGS}$). En la distribución mayorista compleja, el margen bruto ignora las ineficiencias de preparación de pedidos, los incentivos contractuales anuales y el coste de financiación del capital circulante. La **Cascada de Margen de Bolsillo (*Pocket Margin Waterfall*)** descompone metódicamente el precio de lista de catálogo hasta llegar a la contribución neta real en caja, revelando exactamente dónde se evapora el dinero.
 
@@ -139,11 +152,11 @@ El EBITDA consolidado pasa de **$210,72M a $311,67M (+47,9% de crecimiento)**. R
 
 ---
 
-## 6. Entregable Corporativo: Modelo Financiero Ejecutivo en Excel
+## 7. Entregable Corporativo: Modelo Financiero en Excel
 
-Entendiendo que los comités de dirección y los directores de operaciones evalúan y aprueban sus planes en hojas de cálculo y no en consolas de código, el pipeline compila de forma automática todos los resultados en un libro de trabajo en Excel estructurado con calidad institucional: [`data/B2B_Margin_Leakage_Executive_Model.xlsx`](data/B2B_Margin_Leakage_Executive_Model.xlsx).
+Dado que los equipos de operaciones y finanzas trabajan a diario en hojas de cálculo, el pipeline compila automáticamente todo el análisis en un modelo financiero estructurado en Excel: [`data/B2B_Margin_Leakage_Executive_Model.xlsx`](data/B2B_Margin_Leakage_Executive_Model.xlsx).
 
-Diseñado con una estética minimalista acorde con tipografía de currículum ejecutivo (fondo blanco limpio, cabeceras en gris suave neutro, líneas divisorias carbón y números negativos en rojo contable profesional), el modelo se distribuye en cinco pestañas funcionales:
+Diseñado con una estética minimalista limpia (fondo blanco, cabeceras en gris neutro suave, líneas divisorias carbón y números negativos en rojo contable profesional), el modelo se distribuye en cinco pestañas funcionales:
 
 ```
 ┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
@@ -168,7 +181,7 @@ El ancho de todas las columnas ha sido dimensionado con holgura matemática (ent
 
 ---
 
-## 7. Estructura del Repositorio
+## 8. Estructura del Repositorio
 
 ```
 proyecto-analisis-datos-b2b/
@@ -205,7 +218,7 @@ proyecto-analisis-datos-b2b/
 
 ---
 
-## 8. Guía de Ejecución y Validación
+## 9. Guía de Ejecución y Validación
 
 El código ha sido desarrollado con estándares de calidad de ingeniería de software senior: funciones modulares con anotaciones de tipo, semillas pseudoaleatorias reproducibles y pruebas unitarias completas.
 
@@ -231,7 +244,7 @@ python -m pytest tests/test_pipeline.py -v
 
 ---
 
-## 9. Hoja de Ruta para la Implantación Operativa
+## 10. Hoja de Ruta para la Implantación Operativa
 
 Para llevar estas conclusiones a la práctica diaria en una empresa distribuidora, la dirección de operaciones debe estructurar el despliegue comercial en cuatro fases:
 

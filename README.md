@@ -41,7 +41,20 @@ To rectify this imbalance without inducing customer attrition, we deploy a **Dua
 
 ---
 
-## 2. Pocket Margin Waterfall Analysis
+## 2. Dataset & ERP Data Architecture
+
+Because real-world enterprise transactional records from B2B wholesale distributors are protected under strict non-disclosure agreements (NDAs), this project uses a synthetically generated but structurally realistic ERP transactional dataset (`data/b2b_erp_transactions.parquet`). 
+
+The generator (`src/data_generator.py`) simulates a full fiscal year of activity across **55,000 invoice lines, 800 SMB and mid-market accounts, 25 sales representatives, and 4 product families** (Heavy Industrial Machinery, Specialty Chemicals, Electronic Sensors, and MRO Supplies). The schema mirrors actual relational tables found in ERP systems such as Sage 50 and SAP S/4HANA:
+- **Commercial Variables:** Unit List Price, Negotiated Discount %, Invoiced Revenue, Sales Rep ID, Customer Account Tier, and Contracted Off-Invoice Rebates (1.5% to 3.5%).
+- **Fulfillment & Operational Variables:** Cost of Goods Sold (COGS), base warehouse pick/pack handling fees ($20 to $45), unit freight rates, and less-than-truckload (LTL) rush accessorial fees for emergency drop-shipments.
+- **Financial Terms:** Payment terms and empirical payment delay days (ranging from 25 days for disciplined accounts to over 110 days for delinquent accounts), evaluated against an 8.5% annual Weighted Average Cost of Capital (WACC).
+
+All random distributions and customer behavioral profiles are seeded (`random_state=42`) to guarantee 100% reproducible results.
+
+---
+
+## 3. Pocket Margin Waterfall Analysis
 
 Conventional financial statements mislead commercial leadership by evaluating profitability at the gross margin tier ($\text{Gross Profit} = \text{Revenue} - \text{COGS}$). In multi-echelon B2B distribution, gross profit ignores fulfillment friction, volume kickbacks, and working capital carrying charges. The **Pocket Margin Waterfall** bridges Gross List Value down to true net cash contribution, exposing where value leaks between catalog pricing and cash collection.
 
@@ -139,11 +152,11 @@ Total enterprise EBITDA expands from **$210.72M to $311.67M (+47.9% net growth)*
 
 ---
 
-## 6. Corporate Deliverable: Executive Excel Financial Model
+## 7. Corporate Deliverable: Executive Excel Financial Model
 
-Because C-Suite leadership and operations directors make capital decisions inside spreadsheets rather than code terminals, the pipeline automatically compiles all empirical findings into a structured, institutional-grade workbook: [`data/B2B_Margin_Leakage_Executive_Model.xlsx`](data/B2B_Margin_Leakage_Executive_Model.xlsx).
+Since commercial leadership and operations teams work daily in spreadsheets, the pipeline automatically compiles the complete analysis into a clean, structured Excel financial model: [`data/B2B_Margin_Leakage_Executive_Model.xlsx`](data/B2B_Margin_Leakage_Executive_Model.xlsx).
 
-Designed with a clean, monochrome aesthetic matching corporate resume typography (pure white background, soft grey headers, charcoal dividers, and native red accounting formatting for negative values), the model spans five dedicated sheets:
+Designed with a clean, monochrome layout (pure white background, soft grey headers, charcoal dividers, and native red accounting formatting for negative values), the model organizes the findings across five dedicated tabs:
 
 ```
 ┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
@@ -168,7 +181,7 @@ Column widths are dynamically sized with generous safety margins (18 to 39 chara
 
 ---
 
-## 7. Repository Structure
+## 8. Repository Structure
 
 ```
 proyecto-analisis-datos-b2b/
@@ -204,7 +217,7 @@ proyecto-analisis-datos-b2b/
 
 ---
 
-## 8. Execution & Verification Guide
+## 9. Execution & Verification Guide
 
 The codebase is engineered with strict production standards: fully modular functions, explicit type annotations, reproducible random seeds, and an automated test suite.
 
@@ -226,11 +239,11 @@ Run the comprehensive test suite to validate mathematical identities, financial 
 ```bash
 python -m pytest tests/test_pipeline.py -v
 ```
-*Expected output: 8 passed in ~4.5 seconds.*
+*Expected output: 8 passed in ~3.5 seconds.*
 
 ---
 
-## 9. Operational Governance & Implementation Roadmap
+## 10. Operational Governance & Implementation Roadmap
 
 To operationalize these analytical findings within an active wholesale or distribution business, revenue operations leadership should execute a phased commercial governance rollout:
 

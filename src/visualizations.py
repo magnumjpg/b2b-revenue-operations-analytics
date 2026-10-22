@@ -101,17 +101,22 @@ class FinancialVisualizationEngine:
             val_text = f"${amt:+,.1f}M" if t in ["leakage", "cost"] else f"${amt:,.1f}M"
             pct_text = f"({pct:+.1f}%)" if t in ["leakage", "cost"] else f"({pct:.1f}%)"
             
-            y_pos = b + (h / 2)
-            # Text color based on bar contrast
-            text_color = "#FFFFFF"
-            ax.text(bar.get_x() + bar.get_width() / 2, y_pos + 15, val_text,
-                    ha="center", va="center", color=text_color, fontweight="bold", fontsize=10.5, zorder=4)
-            ax.text(bar.get_x() + bar.get_width() / 2, y_pos - 15, pct_text,
-                    ha="center", va="center", color=text_color, fontsize=8.5, alpha=0.9, zorder=4)
+            # If bar is thin (< 55M height), render label above or below the bar in dark legible font
+            if h < 55:
+                # For negative leakages, place above the top of the bar
+                y_label = b + h + 22
+                ax.text(bar.get_x() + bar.get_width() / 2, y_label, f"{val_text}\n{pct_text}",
+                        ha="center", va="bottom", color="#0F172A", fontweight="bold", fontsize=9.5, zorder=5)
+            else:
+                y_pos = b + (h / 2)
+                ax.text(bar.get_x() + bar.get_width() / 2, y_pos + 14, val_text,
+                        ha="center", va="center", color="#FFFFFF", fontweight="bold", fontsize=10.5, zorder=4)
+                ax.text(bar.get_x() + bar.get_width() / 2, y_pos - 14, pct_text,
+                        ha="center", va="center", color="#FFFFFF", fontsize=8.5, alpha=0.9, zorder=4)
             
         ax.set_title("B2B Pocket Margin Waterfall: Deconstructing Top-Line Profit Leakage",
                      fontsize=16, fontweight="bold", pad=25, color="#0F172A", loc="left")
-        ax.text(0.0, 1.02, "Values in Millions USD ($M). Percentages indexed relative to Net Invoiced Revenue ($1,127.7M = 100%).",
+        ax.text(0.0, 1.02, "Values in Millions USD (M). Percentages indexed relative to Net Invoiced Revenue (1,127.7M USD = 100%).",
                 transform=ax.transAxes, fontsize=10.5, color="#64748B")
         
         ax.set_ylabel("Enterprise Value ($M USD)", fontsize=12, fontweight="bold", color="#334155")
@@ -192,7 +197,7 @@ class FinancialVisualizationEngine:
         # Mark Tail Destruction
         erosion_val = metrics["ebitda_destroyed_by_tail"] / 1e6
         ax.annotate(
-            f"PROFIT EROSION TAIL\n-$ {erosion_val:,.1f}M (-{metrics['ebitda_destroyed_pct']:.1f}%)\nDestroyed by 122 Accounts",
+            f"PROFIT EROSION TAIL\n-${erosion_val:,.1f}M (-{metrics['ebitda_destroyed_pct']:.1f}%)\nDestroyed by 122 Accounts",
             xy=(95, 108), xytext=(72, 60),
             arrowprops=dict(arrowstyle="->", color="#B91C1C", lw=1.8),
             bbox=dict(boxstyle="round,pad=0.6", facecolor="#FFE4E6", edgecolor="#E11D48", alpha=0.95),
@@ -308,24 +313,25 @@ class FinancialVisualizationEngine:
         bars1 = ax1.bar(scenarios, ebitda_values, color=colors, width=0.48, edgecolor="#0F172A", linewidth=0.8, zorder=3)
         for bar, val, pct in zip(bars1, ebitda_values, margin_pcts):
             h = bar.get_height()
-            ax1.text(bar.get_x() + bar.get_width() / 2, h + 8, f"${val:,.1f}M\n({pct:.1f}% Margin)",
-                     ha="center", va="bottom", fontsize=11, fontweight="bold", color="#0F172A")
+            # Place label cleanly inside the bar with high white contrast
+            ax1.text(bar.get_x() + bar.get_width() / 2, h - 32, f"${val:,.1f}M\n({pct:.1f}% Margin)",
+                     ha="center", va="center", fontsize=11, fontweight="bold", color="#FFFFFF", zorder=4)
             
         ax1.set_title("Total Pocket EBITDA Expansion", fontsize=13, fontweight="bold", color="#0F172A", pad=15)
         ax1.set_ylabel("Pocket EBITDA ($M USD)", fontsize=11, fontweight="bold", color="#334155")
-        ax1.set_ylim(0, max(ebitda_values) * 1.25)
+        ax1.set_ylim(0, max(ebitda_values) * 1.35)
         ax1.yaxis.set_major_formatter(ticker.StrMethodFormatter("${x:,.0f}M"))
         ax1.grid(axis="y", linestyle=":", alpha=0.6, color="#CBD5E1")
         
-        # Add delta arrow
+        # Add delta arrow cleanly above the bars without any overlap
         delta = sim_res["ebitda_expansion_amount"] / 1e6
         bps = sim_res["ebitda_margin_expansion_bps"]
         ax1.annotate(
             f"+${delta:,.1f}M EBITDA (+{bps:.0f} bps)\n+47.9% Profit Expansion",
-            xy=(1, ebitda_values[1]), xytext=(0.45, ebitda_values[1] + 25),
+            xy=(1, ebitda_values[1]), xytext=(0.50, 365),
             arrowprops=dict(arrowstyle="->", color="#059669", lw=2.0),
             bbox=dict(boxstyle="round,pad=0.5", facecolor="#D1FAE5", edgecolor="#059669", alpha=0.95),
-            fontsize=10.5, fontweight="bold", color="#065F46"
+            fontsize=10.5, fontweight="bold", color="#065F46", ha="center"
         )
         
         # Panel 2: Tier by Tier Recovery Breakdown
