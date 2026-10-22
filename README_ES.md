@@ -193,9 +193,6 @@ proyecto-analisis-datos-b2b/
 ├── data/                                 # Datos y Entregable en Hoja de Cálculo
 │   ├── B2B_Margin_Leakage_Executive_Model.xlsx # Modelo Financiero en Excel de 5 pestañas
 │   └── b2b_erp_transactions.parquet      # 55.000 registros transaccionales (Parquet)
-├── docs/                                 # Documentación y Memoria del Proyecto
-│   ├── context.md                        # Arquitectura técnica y diccionario de datos
-│   └── memory.md                         # Registro continuo de lecciones y validaciones
 ├── notebooks/                            # Cuaderno Interactivo de Auditoría
 │   └── 01_executive_margin_audit.ipynb   # Cuaderno Jupyter ejecutable paso a paso
 ├── src/                                  # Módulos Cuantitativos en Python

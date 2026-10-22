@@ -193,9 +193,6 @@ proyecto-analisis-datos-b2b/
 ├── data/                                 # Datasets & Corporate Deliverables
 │   ├── B2B_Margin_Leakage_Executive_Model.xlsx # 5-Tab Institutional Financial Model
 │   └── b2b_erp_transactions.parquet      # 55,000 ERP line items (Parquet format)
-├── docs/                                 # Documentation & Project Memory
-│   ├── context.md                        # Technical architecture & data dictionary
-│   └── memory.md                         # Continuous memory ledger & verified results
 ├── notebooks/                            # Interactive Walkthroughs
 │   └── 01_executive_margin_audit.ipynb   # Step-by-step Jupyter analysis notebook
 ├── src/                                  # Modular Quantitative Python Package
