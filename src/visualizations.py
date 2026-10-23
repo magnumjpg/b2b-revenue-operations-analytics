@@ -1,5 +1,6 @@
 """
-Financial Visualization Agent
+Financial & C-Suite Visualization Module
+Author: Jaime Pérez | Revenue Operations & Pricing Analytics Portfolio
 Generates publication-grade, C-suite executive charts:
 1. Pocket Margin Waterfall Chart (Step-by-step margin bridge)
 2. Whale Curve (Stobachoff Cumulative Customer Profitability)

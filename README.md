@@ -66,7 +66,7 @@ Beneath this line, however, significant below-the-line deductions erode profitab
 
 ---
 
-## 3. The Whale Curve: Cumulative Customer Profitability
+## 4. The Whale Curve: Cumulative Customer Profitability
 
 The distribution of enterprise profit across customer accounts follows an extreme Pareto skew. The **Whale Curve (Stobachoff Analysis)** plots cumulative pocket profit against cumulative customer percentage, ranking all 800 accounts from most to least profitable to determine where profit is generated, where it plateaus, and where it is destroyed.
 
@@ -80,7 +80,7 @@ The curve reveals three distinct operational regimes across the customer base:
 
 ---
 
-## 4. Root Cause Diagnostics: Rogue Discounting & Price-Volume Dispersion
+## 5. Root Cause Diagnostics: Rogue Discounting & Price-Volume Dispersion
 
 Cross-referencing invoice-level discount rates against order quantities exposes the operational driver of the toxic tail. Standard commercial logic dictates an upward-sloping quantity discount schedule: small orders receive minimal discounts to offset fixed order-processing costs, while bulk orders earn higher volume incentives. In this enterprise, however, decentralized commercial governance created severe price dispersion.
 
@@ -93,11 +93,11 @@ By clustering sales representative performance across 25 commercial territories,
 - **REP-04:** Conceded **47.77% on micro-orders**, yielding an aggregate pocket margin of **-2.16%**.
 - **REP-05:** Conceded **47.34% on micro-orders**, yielding an aggregate pocket margin of **+4.78%**.
 
-Because warehouse picking and shipping minimums range between $45 and $120 per dispatch, an order for 2 units of an MRO or industrial chemical item discounted by 45% generates an immediate operational cash loss before accounting for financing or sales commissions.
+Because warehouse picking, pallet staging, and carrier dispatch incur fixed handling costs between $45 and $120 per shipment—coupled with urgent less-than-truckload (LTL) carrier surcharges reaching 8% to 15% of delivered value—an order for 2 units of an MRO or industrial chemical item discounted by 45% generates an immediate operational cash loss before accounting for financing or sales commissions.
 
 ---
 
-## 5. Dual-Tier Decision Architecture: System 1 & System 2 Engine
+## 6. Dual-Tier Decision Architecture: System 1 & System 2 Engine
 
 To address both real-time operational execution and long-term portfolio strategy, the pricing architecture is split into two interconnected layers inspired by cognitive decision theory:
 
@@ -132,7 +132,7 @@ To address both real-time operational execution and long-term portfolio strategy
 
 ### System 1: Real-Time CPQ Reflexive Guardrail
 System 1 operates within Configure, Price, Quote (CPQ) and ERP order entry workflows with an average execution latency of **0.009 milliseconds (<10 microseconds)**. When a sales representative submits an order line, System 1 evaluates three deterministic checkpoints:
-1. **Minimum Order Quantity (MOQ):** Ensures the order quantity covers base logistics handling fees by product family (5 units for Heavy Industrial, 8 for Chemicals, 20 for Sensors, 25 for MRO). If sub-MOQ, quantity is rounded up or an automated $120 handling surcharge is attached.
+1. **Minimum Order Quantity (MOQ):** Ensures the order quantity covers base logistics handling fees by product family (5 units for Heavy Industrial, 8 for Chemicals, 20 for Sensors, 25 for MRO). If sub-MOQ, quantity is rounded up to threshold or subject to mandatory LTL freight recovery surcharges and a $120 sub-scale handling fee.
 2. **Discount Floor Grid:** Caps allowable discounts by volume bracket (micro-orders capped at 8-12%; bulk pallet orders eligible for up to 35%).
 3. **Rogue Representative Audit:** Flagged representatives attempting unauthorized concessions are blocked and escalated to the Commercial Finance Director.
 
@@ -184,7 +184,7 @@ Column widths are dynamically sized with generous safety margins (18 to 39 chara
 ## 8. Repository Structure
 
 ```
-proyecto-analisis-datos-b2b/
+b2b-revenue-operations-analytics/
 ├── assets/                               # Publication-Grade Visualizations (300 DPI)
 │   ├── 01_pocket_margin_waterfall.png    # Step-by-step pocket margin bridge
 │   ├── 02_whale_curve_profitability.png  # Stobachoff cumulative profit curve
@@ -208,7 +208,6 @@ proyecto-analisis-datos-b2b/
 ├── tests/                                # Test Suite & SWE Verification
 │   └── test_pipeline.py                  # Pytest unit tests (8 passing tests)
 ├── main.py                               # Master orchestration pipeline script
-├── SYSTEM_NOTES.md                       # Empirical audit ledger with exact numbers
 └── README.md                             # Executive portfolio case study
 ```
 

@@ -66,7 +66,7 @@ Sin embargo, por debajo de esta línea se desencadenan las verdaderas mermas ope
 
 ---
 
-## 3. La Curva de la Ballena: Rentabilidad Acumulada de Clientes
+## 4. La Curva de la Ballena: Rentabilidad Acumulada de Clientes
 
 La rentabilidad del negocio no se reparte de forma homogénea entre los clientes. La **Curva de la Ballena (Análisis de Stobachoff)** grafica el beneficio acumulado frente al porcentaje acumulado de clientes, ordenando a las 800 cuentas de mayor a menor contribución para identificar con exactitud qué clientes crean valor, cuáles se mantienen en equilibrio y cuáles destruyen el resultado empresarial.
 
@@ -80,7 +80,7 @@ La gráfica delimita con nitidez tres regímenes operativos en la cartera:
 
 ---
 
-## 4. Diagnóstico de Causas Raíz: Descuentos Rebeldes y Dispersión Precio-Volumen
+## 5. Diagnóstico de Causas Raíz: Descuentos Rebeldes y Dispersión Precio-Volumen
 
 Al cruzar los descuentos concedidos en cada factura con la cantidad física solicitada en cada línea de pedido, queda al descubierto el origen operativo de la cola tóxica. La lógica comercial básica estipula una curva de precios escalonada: los pedidos unitarios conllevan descuentos mínimos para absorber los costes fijos de manipulación, mientras que el volumen de paletización justifica concesiones más elevadas. No obstante, una gestión comercial desarticulada generó una dispersión extrema de precios.
 
@@ -93,11 +93,11 @@ Mediante técnicas de *clustering* aplicadas sobre el comportamiento de los 25 r
 - **REP-04:** Concedió un **47,77% en pedidos pequeños**, con un margen neto acumulado del **-2,16%**.
 - **REP-05:** Concedió un **47,34% en pedidos pequeños**, alcanzando únicamente un **+4,78%** de margen.
 
-Dado que los costes fijos mínimos de manipulación en almacén y transporte oscilan entre $45 y $120 por envío individual, un pedido de dos unidades de producto químico o ferretería industrial con un 45% de descuento genera una pérdida neta antes de repercutir costes de financiación o salarios.
+Dado que los costes fijos de preparación en almacén y expedición oscilan entre $45 y $120 por envío individual—sumados a recargos de transporte especial urgente/LTL que suponen entre el 8% y el 15% del valor de la expedición—un pedido de dos unidades de producto químico o ferretería industrial con un 45% de descuento genera una pérdida neta inmediata antes de repercutir costes de financiación o comisiones.
 
 ---
 
-## 5. Arquitectura Dual de Decisión: Motores System 1 y System 2
+## 6. Arquitectura Dual de Decisión: Motores System 1 y System 2
 
 Para abordar simultáneamente el control operativo en el momento de la venta y la optimización estratégica a largo plazo, la solución se articula en dos niveles complementarios basados en la teoría cognitiva de toma de decisiones:
 
@@ -132,7 +132,7 @@ Para abordar simultáneamente el control operativo en el momento de la venta y l
 
 ### System 1: Guardarraíl de Cotización en Tiempo Real
 El motor System 1 opera integrado en las herramientas de cotización (CPQ) y terminales ERP con una latencia media de **0,009 milisegundos (<10 microsegundos)** por validación. Cuando un comercial introduce una línea de pedido, el algoritmo verifica tres condiciones deterministas:
-1. **Cantidad Mínima de Pedido (MOQ):** Exige que el pedido alcance el volumen mínimo requerido para absorber los gastos fijos de manipulación según la familia de producto (5 unidades para Maquinaria, 8 para Químicos, 20 para Sensores y 25 para Suministros MRO). Si el pedido no alcanza el umbral, el sistema incrementa la cantidad al mínimo o aplica automáticamente un recargo logístico de $120.
+1. **Cantidad Mínima de Pedido (MOQ):** Exige que el pedido alcance el volumen mínimo requerido para absorber los gastos fijos de manipulación según la familia de producto (5 unidades para Maquinaria, 8 para Químicos, 20 para Sensores y 25 para Suministros MRO). Si el pedido no alcanza el umbral, el sistema incrementa la cantidad al mínimo o repercute recargos de flete especial LTL y una tarifa de manipulación por pedido sub-escala de $120.
 2. **Matriz de Techos de Descuento:** Fija un suelo de rentabilidad limitando los descuentos según el volumen (micro-pedidos limitados a un 8-12%; pedidos de palet completo elegibles hasta un 35%).
 3. **Auditoría de Comercial Asignado:** Si el vendedor figura en el listado de comerciales reincidentes en sobre-descuentos, el sistema bloquea la aprobación inmediata y desvía la propuesta a la Dirección Financiera.
 
@@ -184,7 +184,7 @@ El ancho de todas las columnas ha sido dimensionado con holgura matemática (ent
 ## 8. Estructura del Repositorio
 
 ```
-proyecto-analisis-datos-b2b/
+b2b-revenue-operations-analytics/
 ├── assets/                               # Gráficos de Publicación Ejecutiva (300 DPI)
 │   ├── 01_pocket_margin_waterfall.png    # Cascada de margen de bolsillo paso a paso
 │   ├── 02_whale_curve_profitability.png  # Curva de rentabilidad acumulada de Stobachoff
@@ -208,7 +208,6 @@ proyecto-analisis-datos-b2b/
 ├── tests/                                # Batería de Pruebas Unitarias
 │   └── test_pipeline.py                  # Suite de Pytest (8 pruebas superadas)
 ├── main.py                               # Orquestador del pipeline de principio a fin
-├── SYSTEM_NOTES.md                       # Bitácora continua con cifras auditadas exactas
 ├── README.md                             # Documento principal en inglés para EE.UU.
 └── README_ES.md                          # Versión completa documentada en español
 ```
